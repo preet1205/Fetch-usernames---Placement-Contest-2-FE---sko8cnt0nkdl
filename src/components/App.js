@@ -3,16 +3,23 @@ import "../styles/App.css";
 import { useState, useEffect } from "react";
 const App = () => {
   const [name, setName] = useState("");
-  const [id, setId] = useState(1);
+  const [id, setId] = useState("");
 
   useEffect(() => {
-    fetch(`https://content.newtonschool.co/v1/pr/main/users/${id}`)
-      .then((response) => response.json())
-      .then((data) => setName(data.name))
-      .catch((err) => console.log(err));
+    const fetchData = async (id = 1) => {
+      await fetch(`https://content.newtonschool.co/v1/pr/main/users/${id}`)
+        .then((response) => response.json())
+        .then((data) => setName(data.name))
+        .catch((err) => console.log(err));
+    };
+    if (id) {
+      fetchData(id);
+    } else {
+      fetchData();
+    }
   }, [id]);
 
-  const changeInput = (e) => {
+  const changeInput = async (e) => {
     setId(e.target.value);
   };
   return (
